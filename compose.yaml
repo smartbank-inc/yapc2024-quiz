@@ -1,0 +1,28 @@
+version: '3'
+services:
+  api-ruby:
+    build:
+      context: ./api-ruby
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+  api-go:
+    build:
+      context: ./api-go
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+  api-perl:
+    build:
+      context: ./api-perl
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+  client:
+    image: ruby:3.3.0-bullseye
+    volumes:
+      - ./client/client.rb:/client.rb
+      - ./client/requests.csv:/requests.csv
+    command: ruby client.rb
+    environment:
+      - API_HOST=http://${API_HOST:-api-ruby}:3000
